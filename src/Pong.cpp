@@ -217,3 +217,44 @@ void Game::ReadEvent(sf::Event& event)
         }
     }
 }
+
+///////////////////////////////////////////////////////
+//     a      /  
+//    ---     / 7-Segment digital display
+// f |   | b  / 
+//   |   |    /
+//    ---     /
+// e | g | c  /
+//   |   |    /
+//    ---     /
+//     d      /
+// 
+// ScoreCard::ScoreCard(float originX, float originY)
+//     : m_Score(0)
+// {
+//     a1 = b1 = c1 = d1 = e1 = f1 = true; // 0
+//     g1 = a2 = b2 = c2 = d2 = e2 = f2 = g2 = false; // Blank
+
+//     sf::Vector2f row_bars(25.f, 10.f);
+//     sf::Vector2f col_bars(10.f, 25.f);
+//     r_a1.setSize(row_bars); r_a2.setSize(row_bars); r_d1.setSize(row_bars); r_d2.setSize(row_bars); r_g1.setSize(row_bars); r_g2.setSize(row_bars);
+//     r_b1.setSize(col_bars); r_c1.setSize(col_bars); r_e1.setSize(col_bars); r_f1.setSize(col_bars);
+//     r_b2.setSize(col_bars); r_c2.setSize(col_bars); r_e2.setSize(col_bars); r_f2.setSize(col_bars);
+//     r_a1.setFillColor(sf::Color::White); r_b1.setFillColor(sf::Color::White); r_c1.setFillColor(sf::Color::White); r_d1.setFillColor(sf::Color::White); r_e1.setFillColor(sf::Color::White); r_f1.setFillColor(sf::Color::White);
+//     r_g1.setFillColor(sf::Color::White);
+//     r_a1.setFillColor(sf::Color::White); r_b1.setFillColor(sf::Color::White); r_c1.setFillColor(sf::Color::White); r_d1.setFillColor(sf::Color::White); r_e1.setFillColor(sf::Color::White); r_f1.setFillColor(sf::Color::White); r_g1.setFillColor(sf::Color::White);
+
+//     sf::Vector2f origin(originX, originY);
+//     r_f2.setPosition(origin);
+// }
+
+//     ~ScoreCard() = default;
+
+//     void Incr();
+
+// private:
+//     int m_Score;
+//     bool a1,b1,c1,d1,e1,f1,g1,
+//          a2,b2,d2,d2,e2,f2,g2;
+//     std::vector<std::shared_ptr<sf::RectangleShape>> m_Bars;
+// };

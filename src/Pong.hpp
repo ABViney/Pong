@@ -57,6 +57,9 @@ protected:
     std::vector<std::shared_ptr<sf::RectangleShape>> m_Rects;
 };
 
+//////////////
+// Game Process
+//////////////
 class Game : public Scene
 {
 public:
@@ -68,6 +71,7 @@ public:
 
 private:
     sf::RectangleShape m_Paddle1, m_Paddle2, m_Ball, m_TopBound, m_BotBound;
+    // ScoreCard m_Player_L, m_Player_R;
 
     bool roundStart;
     float m_BallX = 0,
@@ -86,7 +90,9 @@ private:
     void BallLogic();
 };
 
-// Made a class just to make a class, apparently. Remember harder that this isn't Java.
+/////////////////
+// Collision Checking
+////////////////
 class AABB
 {
 public:
@@ -116,4 +122,24 @@ public:
 
 };
 
+//////////////////
+// ScoreCard
+/////////////////
+class ScoreCard
+{
+public:
+    ScoreCard(float originX, float originY);
+    ~ScoreCard() = default;
+
+    void Incr();
+
+    std::vector<sf::RectangleShape> GetShapes();
+
+private:
+    int m_Score;
+    bool a1,b1,c1,d1,e1,f1,g1,
+         a2,b2,c2,d2,e2,f2,g2;
+    sf::RectangleShape r_a1, r_b1, r_c1, r_d1, r_e1, r_f1, r_g1,
+                       r_a2, r_b2, r_c2, r_d2, r_e2, r_f2, r_g2;
+};
 #endif /* Pong.hpp */
