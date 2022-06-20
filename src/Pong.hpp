@@ -8,6 +8,7 @@
 
 class Pong;
 class Scene;
+class ScoreCard;
 class Game;
 class AABB;
 class CPU;
@@ -57,6 +58,31 @@ protected:
     std::vector<std::shared_ptr<sf::RectangleShape>> m_Rects;
 };
 
+//////////////////
+// ScoreCard
+/////////////////
+class ScoreCard
+{
+public:
+    ScoreCard();
+    ~ScoreCard() = default;
+
+    void SetPosition(float x, float y);
+    void Incr();
+    inline int GetScore() const { return m_Score; }
+
+    // std::vector<std::shared_ptr<sf::RectangleShape>> GetShapes();
+    std::vector<sf::RectangleShape*> GetShapes();
+
+private:
+    inline void Off(sf::RectangleShape& r) { r.setFillColor(sf::Color::Transparent); }
+    inline void On (sf::RectangleShape& r) { r.setFillColor(sf::Color::White); }
+
+    int m_Score;
+    sf::RectangleShape r_a1, r_b1, r_c1, r_d1, r_e1, r_f1, r_g1,
+                       r_a2, r_b2, r_c2, r_d2, r_e2, r_f2, r_g2;
+};
+
 //////////////
 // Game Process
 //////////////
@@ -66,12 +92,13 @@ public:
     Game(Pong& container);
     ~Game() = default;
 
+    void Setup();
     void Tick();
     void ReadEvent(sf::Event& event);
 
 private:
     sf::RectangleShape m_Paddle1, m_Paddle2, m_Ball, m_TopBound, m_BotBound;
-    // ScoreCard m_Player_L, m_Player_R;
+    ScoreCard m_Player_L, m_Player_R;
 
     bool roundStart;
     float m_BallX = 0,
@@ -122,24 +149,4 @@ public:
 
 };
 
-//////////////////
-// ScoreCard
-/////////////////
-class ScoreCard
-{
-public:
-    ScoreCard(float originX, float originY);
-    ~ScoreCard() = default;
-
-    void Incr();
-
-    std::vector<sf::RectangleShape> GetShapes();
-
-private:
-    int m_Score;
-    bool a1,b1,c1,d1,e1,f1,g1,
-         a2,b2,c2,d2,e2,f2,g2;
-    sf::RectangleShape r_a1, r_b1, r_c1, r_d1, r_e1, r_f1, r_g1,
-                       r_a2, r_b2, r_c2, r_d2, r_e2, r_f2, r_g2;
-};
 #endif /* Pong.hpp */

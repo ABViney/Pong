@@ -78,13 +78,17 @@ Game::Game(Pong& container)
     m_BotBound.setSize(sf::Vector2f(800.f, 10.f));
     m_BotBound.setPosition(sf::Vector2f(0.f, 600.f));
     m_BotBound.setFillColor(sf::Color::White);
-
+    
     this->m_Rects.emplace_back(&m_Paddle1);
     this->m_Rects.emplace_back(&m_Paddle2);
     this->m_Rects.emplace_back(&m_Ball);
     this->m_Rects.emplace_back(&m_TopBound);
     this->m_Rects.emplace_back(&m_BotBound);
 
+    m_Player_L.SetPosition(10.f, 25.f); m_Player_R.SetPosition(700.f, 25.f);
+
+    for(sf::RectangleShape* r : m_Player_L.GetShapes()) m_Rects.emplace_back(r);
+    for(sf::RectangleShape* r : m_Player_R.GetShapes()) m_Rects.emplace_back(r);
 }
 
 void Game::Tick() // Todo - Remove magic numbers from collision checks
@@ -145,7 +149,7 @@ void Game::BallLaunch()
     // Put point tracking to launch toward whoever scored last
     m_BallX = b_startX; m_BallY = b_startY;
 
-    m_BallVelX = -0.02f;
+    m_BallVelX = -0.1f;
     m_BallVelY = -0.01f;
 }
 
@@ -188,6 +192,9 @@ void Game::BallLogic()
 
         if(m_Ball.getPosition().x+m_Ball.getLocalBounds().width < 0 || m_Ball.getPosition().x > 800.f)
         {
+            if(m_BallX < 400) m_Player_R.Incr();
+            else m_Player_L.Incr();
+
             // Assign point, restart round
             roundStart = false;
             m_BallX = b_startX;
@@ -222,39 +229,98 @@ void Game::ReadEvent(sf::Event& event)
 //     a      /  
 //    ---     / 7-Segment digital display
 // f |   | b  / 
-//   |   |    /
-//    ---     /
+//   |   |    / Width of 90.f
+//    ---     / Height of 50.f
 // e | g | c  /
 //   |   |    /
 //    ---     /
 //     d      /
-// 
-// ScoreCard::ScoreCard(float originX, float originY)
-//     : m_Score(0)
-// {
-//     a1 = b1 = c1 = d1 = e1 = f1 = true; // 0
-//     g1 = a2 = b2 = c2 = d2 = e2 = f2 = g2 = false; // Blank
+//
+ScoreCard::ScoreCard()
+    : m_Score(0)
+{
+        sf::Vector2f row_bars(25.f, 10.f);
+    sf::Vector2f col_bars(10.f, 25.f);
+    r_a1.setSize(row_bars); r_a2.setSize(row_bars); r_d1.setSize(row_bars); r_d2.setSize(row_bars); r_g1.setSize(row_bars); r_g2.setSize(row_bars);
+    r_b1.setSize(col_bars); r_c1.setSize(col_bars); r_e1.setSize(col_bars); r_f1.setSize(col_bars);
+    r_b2.setSize(col_bars); r_c2.setSize(col_bars); r_e2.setSize(col_bars); r_f2.setSize(col_bars);
+    
+    r_a2.setFillColor(sf::Color::White); r_b2.setFillColor(sf::Color::White); r_c2.setFillColor(sf::Color::White); r_d2.setFillColor(sf::Color::White); r_e2.setFillColor(sf::Color::White); r_f2.setFillColor(sf::Color::White);
+    r_a1.setFillColor(sf::Color::White); r_b1.setFillColor(sf::Color::White); r_c1.setFillColor(sf::Color::White); r_d1.setFillColor(sf::Color::White); r_e1.setFillColor(sf::Color::White); r_f1.setFillColor(sf::Color::White);
+    
+    r_g2.setFillColor(sf::Color::Transparent); // 0
+    r_g1.setFillColor(sf::Color::Transparent); // 0
 
-//     sf::Vector2f row_bars(25.f, 10.f);
-//     sf::Vector2f col_bars(10.f, 25.f);
-//     r_a1.setSize(row_bars); r_a2.setSize(row_bars); r_d1.setSize(row_bars); r_d2.setSize(row_bars); r_g1.setSize(row_bars); r_g2.setSize(row_bars);
-//     r_b1.setSize(col_bars); r_c1.setSize(col_bars); r_e1.setSize(col_bars); r_f1.setSize(col_bars);
-//     r_b2.setSize(col_bars); r_c2.setSize(col_bars); r_e2.setSize(col_bars); r_f2.setSize(col_bars);
-//     r_a1.setFillColor(sf::Color::White); r_b1.setFillColor(sf::Color::White); r_c1.setFillColor(sf::Color::White); r_d1.setFillColor(sf::Color::White); r_e1.setFillColor(sf::Color::White); r_f1.setFillColor(sf::Color::White);
-//     r_g1.setFillColor(sf::Color::White);
-//     r_a1.setFillColor(sf::Color::White); r_b1.setFillColor(sf::Color::White); r_c1.setFillColor(sf::Color::White); r_d1.setFillColor(sf::Color::White); r_e1.setFillColor(sf::Color::White); r_f1.setFillColor(sf::Color::White); r_g1.setFillColor(sf::Color::White);
+    SetPosition(0.f, 0.f);
+}
 
-//     sf::Vector2f origin(originX, originY);
-//     r_f2.setPosition(origin);
-// }
+void ScoreCard::SetPosition(float x, float y)
+{
+    sf::Vector2f f2(x, y);
+    sf::Vector2f f1(x + 50.f, y);
+    sf::Vector2f ta(10.f, 0.f), tb(35.f, 0.f), tc(35.f, 25.f), td(10.f, 40.f), te(0.f, 25.f), tg(10.f, 20.f);
+    r_f2.setPosition(f2); r_a2.setPosition(f2+ta); r_b2.setPosition(f2+tb); r_c2.setPosition(f2+tc); r_d2.setPosition(f2+td); r_e2.setPosition(f2+te); r_g2.setPosition(f2+tg);
+    r_f1.setPosition(f1); r_a1.setPosition(f1+ta); r_b1.setPosition(f1+tb); r_c1.setPosition(f1+tc); r_d1.setPosition(f1+td); r_e1.setPosition(f1+te); r_g1.setPosition(f1+tg);
+}
 
-//     ~ScoreCard() = default;
+void ScoreCard::Incr()
+{
+    switch(++m_Score)
+    {
+        case 1:
+            Off(r_a1); Off(r_d1); Off(r_e1); Off(r_f1); 
+            break;
+        case 2:
+            On(r_a1); On(r_g1); On(r_d1); On(r_e1);
+            Off(r_c1);
+            break;
+        case 3:
+            On(r_c1);
+            Off(r_e1);
+            break;
+        case 4:
+            On(r_f1);
+            Off(r_a1); Off(r_d1);
+            break;
+        case 5:
+            On(r_a1); On(r_d1);
+            Off(r_b1); 
+            break;
+        case 6:
+            On(r_e1);
+            break;
+        case 7:
+            On(r_b1);
+            Off(r_d1); Off(r_e1); Off(r_f1); Off(r_g1);
+            break;
+        case 8:
+            On(r_d1); On(r_e1); On(r_f1); On(r_g1);
+            break;
+        case 9:
+            Off(r_e1);
+            break;
+        case 10:
+            On(r_e1);
+            Off(r_g1);
 
-//     void Incr();
+            Off(r_a2); Off(r_d2); Off(r_e2); Off(r_f2);
+            break;
+        case 11:
+            Off(r_a1); Off(r_d1); Off(r_e1); Off(r_f1);
+    }
+};
 
-// private:
-//     int m_Score;
-//     bool a1,b1,c1,d1,e1,f1,g1,
-//          a2,b2,d2,d2,e2,f2,g2;
-//     std::vector<std::shared_ptr<sf::RectangleShape>> m_Bars;
-// };
+std::vector<sf::RectangleShape*> ScoreCard::GetShapes()
+{
+    std::vector<sf::RectangleShape*> shapes = {
+        &r_a1, &r_a2,
+        &r_b1, &r_b2,
+        &r_c1, &r_c2,
+        &r_d1, &r_d2,
+        &r_e1, &r_e2,
+        &r_f1, &r_f2,
+        &r_g1, &r_g2
+    };
+
+    return shapes;
+}
