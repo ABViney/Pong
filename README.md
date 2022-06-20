@@ -1,11 +1,16 @@
 # Pong
-Learn C++ fastly
-
-Making Pong and maybe not pong
-First computar game ever
+Recreating Pong with SFML
 
 Current Stage:
-    Can play simple Pong.
-    Game won't start until a button is pressed
-    Simple CPU implemented
-    Ball will do like 3 bounces before its faster than light
+    Play pong
+    Score tracks
+   
+Todo:
+    Impl win conditions
+    Add audio
+    Add title screen
+    Add pause screen
+    Add randomness to ball start trajectory
+    Bound ball initial velocity
+    Add middle border
+    
